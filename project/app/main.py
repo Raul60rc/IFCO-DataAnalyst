@@ -132,7 +132,7 @@ selected_crates = st.sidebar.multiselect(
 )
 
 threshold = st.sidebar.slider(
-    "Crate ratio threshold (%)", min_value=10, max_value=60, value=60, step=1
+    "Crate ratio threshold (%)", min_value=0, max_value=100, value=60, step=1
 )
 
 # ── Apply date filter ────────────────────────────────────────────────────
