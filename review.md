@@ -19,3 +19,17 @@ Keep the list but add a primary_sales_owner column — take the first name as th
 Pivot into separate columns — sales_owner_1, sales_owner_2, sales_owner_3. Simple but rigid, and makes filtering harder. 
 My review : making more rowns for each sales person will equal to duplicating order_id which is not good either 
 
+## The ai app was making things harcoded & not dynamic so I had to make sure is not harcoding the things & the KPI's change as per the crate type dynamically 
+
+## re guiding the AI for the appropiate chart & data 
+no what I need as an answer is the following : 
+
+we need to be able to look back 3 months behinf & current month  
+
+sum of each owner who is selling plastic crate, wooden crate or any crate... basically as per the filter it should adap dinamically 
+
+Rank the owners 
+
+plot also how the ranks shifts month by month 
+
+I think of the research I have been doing on google a Bump chart would be appropiate to visualize this which I think we had something similiar in the beginning 
