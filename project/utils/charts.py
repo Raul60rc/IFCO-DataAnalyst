@@ -55,7 +55,7 @@ def build_donut_chart(crate_dist: pd.DataFrame) -> go.Figure:
 def build_training_bar_chart(
     owner_ratios: pd.DataFrame, threshold: float, crate_label: str
 ) -> go.Figure:
-    sorted_df = owner_ratios.sort_values("ratio", ascending=True)
+    sorted_df = owner_ratios.sort_values("ratio", ascending=False)
     colors = [_threshold_color(r, threshold) for r in sorted_df["ratio"]]
 
     fig = go.Figure(

@@ -33,3 +33,6 @@ Rank the owners
 plot also how the ranks shifts month by month 
 
 I think of the research I have been doing on google a Bump chart would be appropiate to visualize this which I think we had something similiar in the beginning 
+
+## ranking issue 
+I found a small issue in the training needs I want the lowest to be ranked all the way up so we truly know who needs the training 
