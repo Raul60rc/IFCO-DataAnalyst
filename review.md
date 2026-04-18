@@ -48,4 +48,3 @@ On the training threshold the 30% default I set is arbitrary. In a real context 
 
 Finally, the data sparsity is the biggest limitation of this analysis. 67 orders spread across four years makes the rolling 3-month window produce rankings that shift randomly rather than telling a meaningful story. In the real world this data would be far more continuous and the bump chart would be genuinely insightful. I mitigated this by filtering to the last 12 months, but the fundamental issue is the volume of data available.
 
-## Assumptions
