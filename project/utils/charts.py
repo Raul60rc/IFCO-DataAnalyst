@@ -53,7 +53,7 @@ def build_donut_chart(crate_dist: pd.DataFrame) -> go.Figure:
 
 
 def build_training_bar_chart(
-    owner_ratios: pd.DataFrame, threshold: float, crate_label: str
+    owner_ratios: pd.DataFrame, threshold: float, crate_label: str, date_label: str
 ) -> go.Figure:
     sorted_df = owner_ratios.sort_values("ratio", ascending=False)
     colors = [_threshold_color(r, threshold) for r in sorted_df["ratio"]]
@@ -78,7 +78,7 @@ def build_training_bar_chart(
     fig.update_layout(
         title=dict(
             text=(
-                f"Sales Owners — {crate_label} Ratio (Last 12 Months)"
+                f"Sales Owners — {crate_label} Ratio ({date_label})"
                 f"<br><sup>Owners below the threshold line need the most training on plastic crate sales</sup>"
             ),
             font=dict(color=_BLACK, size=16),
