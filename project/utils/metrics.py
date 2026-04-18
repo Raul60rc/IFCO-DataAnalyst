@@ -115,6 +115,16 @@ def compute_rolling_ranks(
 
     # Keep top N per month
     top = full[full["rank"] <= top_n].copy()
+    # Keep only the 5 owners who appear most frequently in top N
+    top_owner_counts = (
+        top.groupby("sales_owner")["month"]
+        .count()
+        .sort_values(ascending=False)
+        .head(5)
+        .index
+    )
+    top = top[top["sales_owner"].isin(top_owner_counts)].copy()
+
     top["month"] = top["month"].dt.to_timestamp()
     return top[["month", "sales_owner", "rolling_count", "rank"]].reset_index(drop=True)
 

@@ -231,31 +231,18 @@ with tab2:
 
 # ── Tab 3: Bump chart + total bar chart ──────────────────────────────────
 with tab3:
-    st.subheader("Rank Over Time (Bump Chart)")
-    col_window, col_topn = st.columns(2)
-    with col_window:
-        window_option = st.radio(
-            "Rolling window",
-            options=["3 months", "6 months", "12 months"],
-            horizontal=True, index=0,
-        )
-    with col_topn:
-        top_n = st.slider("Show number of rankings", min_value=3, max_value=10, value=5)
-
-    window = {"3 months": 3, "6 months": 6, "12 months": 12}[window_option]
-
-    ranks = compute_rolling_ranks(df, selected_crates, window=window, top_n=top_n)
+    ranks = compute_rolling_ranks(filter_last_12_months(df), selected_crates, window=3, top_n=5)
     if ranks.empty:
         st.info("Not enough data for the bump chart with current filters.")
     else:
         st.plotly_chart(
-            build_bump_chart(ranks, crate_label, window),
+            build_bump_chart(ranks, crate_label, 3),
             use_container_width=True,
         )
 
     st.divider()
     st.subheader("Total Orders (Full Period)")
-    top_performers = compute_top_performers(df, selected_crates, top_n=top_n)
+    top_performers = compute_top_performers(df, selected_crates, top_n=5)
     if top_performers.empty:
         st.info("No data for top performers with current filters.")
     else:
