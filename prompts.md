@@ -283,5 +283,12 @@ Also in the top 5 perfomers I see we barely have like consistent monthly data li
 are you sure is chris patt & not amy winehouse ? maybe we need to chnage the top 5 perfomers visualization 
 
 
-##Thirteenth prompt 
+## Thirteenth prompt 
 serioulsy check the sidebar this is not readable make the text inside the crate types white & improve the crate ratio either make it white also so that we have white & green contrast 
+
+## fourteenth prompt 
+why it is showing 3 owners needing training when it should show 5 no ? This is a mistake on Training needs
+can we make this dynamic based on the filter of the date range also make the title dyanmic
+
+## Fifteenth prompt 
+Okay we need to containarize this project now into a docker so this project is replicable & we need to make sure this works & do the test 

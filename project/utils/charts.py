@@ -53,7 +53,7 @@ def build_donut_chart(crate_dist: pd.DataFrame) -> go.Figure:
 
 
 def build_training_bar_chart(
-    owner_ratios: pd.DataFrame, threshold: float, crate_label: str
+    owner_ratios: pd.DataFrame, threshold: float, crate_label: str, date_label: str
 ) -> go.Figure:
     sorted_df = owner_ratios.sort_values("ratio", ascending=False)
     colors = [_threshold_color(r, threshold) for r in sorted_df["ratio"]]
@@ -76,7 +76,13 @@ def build_training_bar_chart(
         annotation_font=dict(color=_BLACK),
     )
     fig.update_layout(
-        title=f"Sales Owners — {crate_label} Ratio (Last 12 Months)",
+        title=dict(
+            text=(
+                f"Sales Owners — {crate_label} Ratio ({date_label})"
+                f"<br><sup>Owners below the threshold line need the most training on plastic crate sales</sup>"
+            ),
+            font=dict(color=_BLACK, size=16),
+        ),
         xaxis=dict(title=f"{crate_label} Ratio (%)", range=[0, 100], **_AXIS_DEFAULTS),
         yaxis=dict(title="", **_AXIS_DEFAULTS),
         height=max(400, len(sorted_df) * 35),
@@ -166,7 +172,7 @@ def build_bump_chart(
         )
 
     fig.update_layout(
-        title=f"Rank Over Time — {crate_label} Sales (Rolling {window}-Month Window)",
+        title=f"Monthly Leaderboard — {crate_label} Sales (Rolling 3-Month Window)",
         xaxis=dict(title="Month", tickformat="%b %Y", **_AXIS_DEFAULTS),
         yaxis=dict(
             title="Rank",

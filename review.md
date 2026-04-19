@@ -1,38 +1,50 @@
-Section 9 — Simplify contact_data: Strips out city, cp, and anything else — keeps only contact_name and contact_surname. So instead of {'contact_name': 'Curtis', 'contact_surname': 'Jackson', 'city': 'Chicago', 'cp': '12345'} you'll just see {'contact_name': 'Curtis', 'contact_surname': 'Jackson'}
-## I never asked to strip out : in number 9 I never said to strip out Strip out city, cp, and any other fields. 
-answer : You're right, my mistake. You said to extract contact_name and contact_surname and standardise the format — not to remove the other fields. Let me fix that cell to keep all the original fields intact.
+## What I caught and corrected
 
-Second review it did not remove the contact name & surname wrapper around it on the contact data 
-##still same issue on the contact_data we need to remove the rest around it & keep the name & surname only  [{'contact_name': 'Curtis', 'contact_surname':... 
+### 1. "All Crates" vs "Plastic" logic error
+KIRO built all KPIs and charts using all crate types by default. 
+The task specifically asks about plastic crates. I caught this 
+when the KPI showed "All Crates Ratio: 100%" which made no sense 
+for the business question. I corrected this to default to plastic 
+and made the metrics plastic-specific throughout.
 
-##similar company names but not the same company ID 
-I see there is a small issue I made you chnage some copany names like seafood supplier to add GmbH but I noticed they don't have the same company ID so it is not the same company then I guess plus we did the same for fresh fruits Co so we need to maybe rollback 
-once rollbacked make sure you recode the dataRead so we can get to the final verdict 
-Answer : resh Fruits c.o -> Fresh Fruits Co (same company_id 1e2b47e6...)
-healthy snacks c.o. -> Healthy Snacks (same company_id 20dfef10...)
+### 2. Top N slider — removed
+KIRO added a configurable "Top N performers" slider. The requirement 
+explicitly states top 5. I removed the slider and hardcoded N=5 
+to stay true to the spec.
 
-Ai was recomending : 
-Explode into separate rows — one row per sales_owner per order. So an order with 3 owners becomes 3 rows. This is the best approach if you want charts like "orders per salesperson", "revenue per salesperson", or salesperson filters. The downside is your row count goes from 62 to ~150, but that's standard for this kind of analysis.
+### 3. Bump chart vs line chart
+KIRO initially built a line chart with raw rolling counts on Y axis. 
+With only 67 rows of data, counts maxed at 3 making the chart 
+unreadable. I researched alternatives and decided on a bump chart 
+showing rank position instead — this tells the business story 
+more clearly regardless of data volume.
 
-Keep the list but add a primary_sales_owner column — take the first name as the "lead" and keep the full list for reference. Good if you want one salesperson per row for charts but still want to show the full team in a detail view.
+### 4. Data sparsity
+The dataset contains only 67 orders across 4 years. This makes the 
+rolling 3-month window produce sparse and sometimes random-looking 
+rankings. I filtered the bump chart to the last 12 months to make 
+it more readable and added a note in the README about this limitation.
 
-Pivot into separate columns — sales_owner_1, sales_owner_2, sales_owner_3. Simple but rigid, and makes filtering harder. 
-My review : making more rowns for each sales person will equal to duplicating order_id which is not good either 
+### 5. Company name standardisation — rolled back
+I initially asked KIRO to standardise similar company names 
+(e.g. "Seafood Supplier" → "Seafood GmbH") but then realised 
+they had different company_ids meaning they are genuinely 
+different companies. I rolled this back to avoid incorrect 
+data manipulation.
 
-## The ai app was making things harcoded & not dynamic so I had to make sure is not harcoding the things & the KPI's change as per the crate type dynamically 
+### 6. Sales owner exploding
+KIRO suggested keeping sales owners as a list. I decided to 
+explode them into individual rows because the business question 
+requires per-owner analysis. This creates duplicate order_ids 
+which I documented as an assumption.
 
-## re guiding the AI for the appropiate chart & data 
-no what I need as an answer is the following : 
+## What I would improve with more time
+If I had more time, the first thing I would address is the data pipeline itself. The raw data has structural issues that ideally should be fixed at source rather than patched during analysis. Contact name and surname are stored together in a single nested field, which required manual parsing — in a production pipeline these would be separate columns from the start.
 
-we need to be able to look back 3 months behinf & current month  
+The multiple sales owners per order was the most confusing part of the dataset. A single order_id can have two or three different sales owners attached to it, which raises a genuine business question are they collaborating on the same sale, or is this a data quality issue? I resolved it by exploding each owner into their own row, but without clarity from the business on what this relationship actually means, that assumption could be wrong. This is something I would validate with the Data Engineering team before building any production logic on top of it.
 
-sum of each owner who is selling plastic crate, wooden crate or any crate... basically as per the filter it should adap dinamically 
+Company naming was another area I would improve. Some companies appear under slightly different spellings but share the same company_id those are clearly the same entity and I standardised them. However others have similar names but different company_ids, which makes it impossible to know from the data alone whether they are genuinely different companies or just data entry errors. Fuzzy matching combined with a business validation step would be the right approach here.
+On the training threshold the 30% default I set is arbitrary. In a real context I would work with the Sales team to define this based on historical benchmarks, team averages, or business targets. A data-driven threshold would make the training needs chart far more actionable.
 
-Rank the owners 
+Finally, the data sparsity is the biggest limitation of this analysis. 67 orders spread across four years makes the rolling 3-month window produce rankings that shift randomly rather than telling a meaningful story. In the real world this data would be far more continuous and the bump chart would be genuinely insightful. I mitigated this by filtering to the last 12 months, but the fundamental issue is the volume of data available.
 
-plot also how the ranks shifts month by month 
-
-I think of the research I have been doing on google a Bump chart would be appropiate to visualize this which I think we had something similiar in the beginning 
-
-## ranking issue 
-I found a small issue in the training needs I want the lowest to be ranked all the way up so we truly know who needs the training 

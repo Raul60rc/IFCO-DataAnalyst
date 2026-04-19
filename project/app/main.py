@@ -189,11 +189,17 @@ def training_kpi_style(below_count, total_owners):
 total_orders = compute_total_orders(df)
 selected_orders = compute_selected_orders(df, selected_crates)
 selected_ratio = compute_selected_ratio(df, selected_crates)
+
+# Owners needing training uses the same date-filtered data
 owners_below = compute_owners_below_threshold(df, selected_crates, threshold)
 total_owners = compute_total_unique_owners(df)
 
 ratio_bg, ratio_tc = threshold_style(selected_ratio, threshold)
 training_bg, training_tc = training_kpi_style(owners_below, total_owners)
+
+# Date label for chart titles
+import datetime
+date_label = f"{start_date.strftime('%b %Y')} – {end_date.strftime('%b %Y')}"
 
 col1, col2, col3, col4 = st.columns(4)
 with col1:
@@ -219,43 +225,29 @@ with tab1:
 
 # ── Tab 2 ────────────────────────────────────────────────────────────────
 with tab2:
-    df_12m = filter_last_12_months(df)
-    owner_ratios = compute_owner_ratios(df_12m, selected_crates)
+    owner_ratios = compute_owner_ratios(df, selected_crates)
     if owner_ratios.empty:
-        st.info("No data for the last 12 months with current filters.")
+        st.info("No data with current filters.")
     else:
         st.plotly_chart(
-            build_training_bar_chart(owner_ratios, threshold, crate_label),
+            build_training_bar_chart(owner_ratios, threshold, crate_label, date_label),
             use_container_width=True,
         )
 
 # ── Tab 3: Bump chart + total bar chart ──────────────────────────────────
 with tab3:
-    st.subheader("Rank Over Time (Bump Chart)")
-    col_window, col_topn = st.columns(2)
-    with col_window:
-        window_option = st.radio(
-            "Rolling window",
-            options=["3 months", "6 months", "12 months"],
-            horizontal=True, index=0,
-        )
-    with col_topn:
-        top_n = st.slider("Show number of rankings", min_value=3, max_value=10, value=5)
-
-    window = {"3 months": 3, "6 months": 6, "12 months": 12}[window_option]
-
-    ranks = compute_rolling_ranks(df, selected_crates, window=window, top_n=top_n)
+    ranks = compute_rolling_ranks(df, selected_crates, window=3, top_n=5)
     if ranks.empty:
         st.info("Not enough data for the bump chart with current filters.")
     else:
         st.plotly_chart(
-            build_bump_chart(ranks, crate_label, window),
+            build_bump_chart(ranks, crate_label, 3),
             use_container_width=True,
         )
 
     st.divider()
     st.subheader("Total Orders (Full Period)")
-    top_performers = compute_top_performers(df, selected_crates, top_n=top_n)
+    top_performers = compute_top_performers(df, selected_crates, top_n=5)
     if top_performers.empty:
         st.info("No data for top performers with current filters.")
     else:
