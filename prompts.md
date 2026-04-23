@@ -292,3 +292,34 @@ can we make this dynamic based on the filter of the date range also make the tit
 
 ## Fifteenth prompt 
 Okay we need to containarize this project now into a docker so this project is replicable & we need to make sure this works & do the test 
+
+## Sixteenth promtp 
+We need to perform some tasks with the Json file we need to calculate some sales team comissions so the json file is in data engineering test inside resources. 
+
+
+
+As we have seen in the past there has been multiple salesowner which have kind of participated in different stages of the order. 
+
+
+
+so note the following when it comes to comissions : 
+
+Main Owner: 6% of the net invoiced value.
+
+Co-owner 1 (second in the list): 2.5% of the net invoiced value.
+
+Co-owner 2 (third in the list): 0.95% of the net invoiced value.
+
+The rest of the co-owners do not receive anything.
+
+
+
+also we need to provide a list of the sales owners & their respsective comissions  earnings let's sort from descending to ascending performance. 
+
+
+
+The Raw amount of value are represented in cents so we need to convert it into euro amounts with two decimal pleaces in the results plus make sure we have the unit tests to verify the correctnes of the comission calculation . 
+
+
+
+do you think I am missing anything in this prompt ? 
